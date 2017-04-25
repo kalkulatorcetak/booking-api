@@ -19,9 +19,8 @@ $api = app('Dingo\Api\Routing\Router');
 
 $api->version(['version' => 'v1', 'namespace' => 'App\Api\V1\Controllers'], function($api) {
     $api->post('/auth/login', 'App\Api\V1\Controllers\AuthController@login');
-    $api->get('/auth/logout', 'App\Api\V1\Controllers\AuthController@logout');
 
-    $api->group( [ 'middleware' => 'jwt.auth' ], function ($api) {
+    $api->group( [ 'middleware' => ['jwt.auth', 'api.throttle'] ], function ($api) {
         $api->get('/users/{id}', 'App\Api\V1\Controllers\UserController@show');
         $api->get('/users', 'App\Api\V1\Controllers\UserController@index');
     });
