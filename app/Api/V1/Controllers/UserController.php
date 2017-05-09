@@ -6,7 +6,7 @@ use App\Api\V1\Models\User;
 use App\Api\V1\Transformers\UserTransformer;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Http\Request;
 
 /**
  * User resource representation.
@@ -25,11 +25,16 @@ class UserController extends Controller
      * @Get("/")
      * @Versions({"v1"})
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::paginate($this->itemsPerPage);
+        return $this->responseByParams(User::class, $request, ['key' => 'users']);
+        $query = User::query();
+        $params = $this->parseQueryParams($request);
+        $users = $this->applyParams($query, $params);
+        //$users = User::paginate($this->itemsPerPage);
 
-        return $this->response->paginator($users, new UserTransformer, ['key' => 'users']);
+        //return $this->response->paginator($users, new UserTransformer, ['key' => 'users']);
+        return $this->response->collection($users, new UserTransformer, ['key' => 'users']);
     }
 
     /**

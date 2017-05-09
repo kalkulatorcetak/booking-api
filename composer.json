@@ -12,7 +12,8 @@
         "tymon/jwt-auth": "^1.0.0",
         "guzzlehttp/guzzle": "~6.0",
         "lukasoppermann/http-status": "^2.0",
-        "jakubkratina/lumen-dingo-route-list": "^0.9.5"
+        "jakubkratina/lumen-dingo-route-list": "^0.9.5",
+        "ngabor84/lumen-api-query-parser": "~1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
