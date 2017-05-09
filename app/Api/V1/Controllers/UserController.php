@@ -15,12 +15,10 @@ use Illuminate\Http\Request;
  */
 class UserController extends Controller
 {
-    protected $itemsPerPage = 20;
-
     /**
      * Show all users
      *
-     * Get a JSON representation of all the registered users (paginated by 20).
+     * Get a JSON representation of all the registered users.
      *
      * @Get("/")
      * @Versions({"v1"})
@@ -28,13 +26,6 @@ class UserController extends Controller
     public function index(Request $request)
     {
         return $this->responseByParams(User::class, $request, ['key' => 'users']);
-        $query = User::query();
-        $params = $this->parseQueryParams($request);
-        $users = $this->applyParams($query, $params);
-        //$users = User::paginate($this->itemsPerPage);
-
-        //return $this->response->paginator($users, new UserTransformer, ['key' => 'users']);
-        return $this->response->collection($users, new UserTransformer, ['key' => 'users']);
     }
 
     /**
@@ -66,8 +57,7 @@ class UserController extends Controller
      * @Request({"username": "foo", "password": "bar"})
      * @Response(200, body={"id": 10, "username": "foo"})
      */
-    public function store()
+    public function store(UserRequest $request)
     {
-        //example
     }
 }
