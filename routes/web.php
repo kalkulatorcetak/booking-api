@@ -23,5 +23,6 @@ $api->version(['version' => 'v1', 'namespace' => 'App\Api\V1\Controllers'], func
     $api->group( [ 'middleware' => ['jwt.auth', 'api.throttle'] ], function ($api) {
         $api->get('/users/{id}', 'App\Api\V1\Controllers\UserController@show');
         $api->get('/users', 'App\Api\V1\Controllers\UserController@index');
+        $api->post('/users', 'App\Api\V1\Controllers\UserController@store');
     });
 });

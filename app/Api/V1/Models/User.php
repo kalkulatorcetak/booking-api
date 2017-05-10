@@ -30,4 +30,9 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
     {
         return [];
     }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = app('hash')->make($password);
+    }
 }

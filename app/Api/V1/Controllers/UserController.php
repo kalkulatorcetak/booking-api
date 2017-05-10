@@ -4,9 +4,11 @@ namespace App\Api\V1\Controllers;
 
 use App\Api\V1\Models\User;
 use App\Api\V1\Transformers\UserTransformer;
+use App\Api\V1\Validators\UserCreateValidator;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * User resource representation.
@@ -54,10 +56,21 @@ class UserController extends Controller
      *
      * @Post("/")
      * @Versions({"v1"})
-     * @Request({"username": "foo", "password": "bar"})
-     * @Response(200, body={"id": 10, "username": "foo"})
+     * @Request({"name": "John Doe", "email": "john@doe.com", "password": "secret"})
      */
-    public function store(UserRequest $request)
+    public function store(Request $request)
     {
+        $this->validateRequest($request, new UserCreateValidator);
+
+        try {
+            $user = new User;
+            $user->fill($request->only(['name', 'email']));
+            $user->setPassword($request->get('password'));
+            $user->save();
+        } catch (\Exception $ex) {
+            throw new HttpException("500", "Error occured while saving the user");
+        }
+
+        return $this->item($user, new UserTransformer, ['key' => 'user']);
     }
 }

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Validators\RequestValidatorInterface;
+use Dingo\Api\Exception\ValidationHttpException;
 use Dingo\Api\Http\Response;
 use Dingo\Api\Routing\Helpers;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use League\Fractal\TransformerAbstract;
 use LumenApiQueryParser\BuilderParamsApplierTrait;
@@ -41,5 +44,16 @@ class Controller extends BaseController
         }
 
         return new $transformerClass;
+    }
+
+    protected function validateRequest(Request $request, RequestValidatorInterface $validator): void
+    {
+        $validator->authorize($request);
+
+        try {
+            $this->validate($request, $validator->getRules(), $validator->getMessages());
+        } catch(ValidationException $ex) {
+            throw new ValidationHttpException($ex->validator->errors());
+        }
     }
 }
