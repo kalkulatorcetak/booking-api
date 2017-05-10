@@ -2,7 +2,6 @@
 
 namespace Test;
 
-use Illuminate\Support\Facades\Validator;
 use PHPUnit_Framework_Assert as Assertion;
 
 trait TestTrait
@@ -33,7 +32,7 @@ trait TestTrait
 
         }
 
-        $validator = Validator::make($resourceData, $rules);
+        $validator = app('validator')->make($resourceData, $rules);
 
         foreach ($validator->messages()->toArray() as $error) {
             $this->errors[] =  "\e[1;31m× \033[0m".$error[0];

@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class UsersTableSeeder extends Seeder
 {
@@ -13,7 +12,7 @@ class UsersTableSeeder extends Seeder
 
     protected function addAdminUser()
     {
-        DB::table('users')->insert([
+        app('db')->table('users')->insert([
             'name' => 'Test User',
             'email' => 'test@booking-api.dev',
             'password' => app('hash')->make('secret'),
