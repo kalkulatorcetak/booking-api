@@ -27,6 +27,8 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('list', User::class);
+
         return $this->responseByParams(User::class, $request, ['key' => 'users']);
     }
 
@@ -43,8 +45,10 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($id);
         } catch (ModelNotFoundException $ex) {
-            return $this->response->errorNotFound("User with id {$id} not found!");
+            $this->response->errorNotFound("User with id {$id} not found!");
         }
+
+        $this->authorize('load', $user);
 
         return $this->item($user, new UserTransformer, ['key' => 'user']);
     }
@@ -60,16 +64,13 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', User::class);
         $this->validateRequest($request, new UserCreateValidator);
 
-        try {
-            $user = new User;
-            $user->fill($request->only(['name', 'email']));
-            $user->setPassword($request->get('password'));
-            $user->save();
-        } catch (\Exception $ex) {
-            throw new HttpException("500", "Error occured while saving the user");
-        }
+        $user = new User;
+        $user->fill($request->only(['name', 'email']));
+        $user->setPassword($request->get('password'));
+        $user->save();
 
         return $this->item($user, new UserTransformer, ['key' => 'user']);
     }

@@ -27,6 +27,9 @@ $app = new Laravel\Lumen\Application(
 
 $app->withEloquent();
 
+$app->configure('roles');
+$app->configure('permissions');
+
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -85,6 +88,9 @@ $app->register(App\Providers\EventServiceProvider::class);
 $app->register(Dingo\Api\Provider\LumenServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(LumenApiQueryParser\Provider\RequestQueryParserProvider::class);
+$app->register(App\Providers\PermissionServiceProvider::class);
+$app->register(App\Providers\RoleServiceProvider::class);
+
 $app['Dingo\Api\Auth\Auth']->extend('jwt', function ($app) {
     return new Dingo\Api\Auth\Provider\JWT($app['Tymon\JWTAuth\JWTAuth']);
 });

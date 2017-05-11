@@ -2,16 +2,18 @@
 
 namespace App\Api\V1\Models;
 
+use App\Models\AbstractModel;
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Laravel\Lumen\Auth\Authorizable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Model implements JWTSubject, AuthenticatableContract, AuthorizableContract
+class User extends AbstractModel implements JWTSubject, AuthenticatableContract, AuthorizableContract
 {
     use Authenticatable, Authorizable;
+
+    protected $permissions;
 
     protected $fillable = [
         'name', 'email',
@@ -34,5 +36,46 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
     public function setPassword(string $password): void
     {
         $this->password = app('hash')->make($password);
+    }
+
+    public function setRoles(array $roles): void
+    {
+        $this->roles = implode(',', $roles);
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return in_array($role, $this->getRoles());
+    }
+
+    public function getRoles(): array
+    {
+        return explode(',', $this->roles);
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        return in_array($permission, $this->getPermissions());
+    }
+
+    public function getPermissions(): array
+    {
+        if (!isset($this->permissions)) {
+            $this->permissions = [];
+            foreach ($this->getRoles() as $role) {
+                foreach (app('roles')->getRolePermissions($role) as $permission) {
+                    if (!in_array($permission, $this->permissions)) {
+                        $this->permissions[] = $permission;
+                    }
+                }
+            }
+        }
+
+        return $this->permissions;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('ADMIN');
     }
 }
