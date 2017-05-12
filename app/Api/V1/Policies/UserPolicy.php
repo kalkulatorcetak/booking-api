@@ -6,7 +6,7 @@ use App\Api\V1\Models\User;
 
 class UserPolicy
 {
-    public function before(User $user, $ability): ?bool
+    public function before(User $user): ?bool
     {
         return $user->isAdmin() ? true : null;
     }
