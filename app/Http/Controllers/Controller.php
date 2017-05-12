@@ -12,7 +12,6 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 use League\Fractal\TransformerAbstract;
 use LumenApiQueryParser\BuilderParamsApplierTrait;
 use LumenApiQueryParser\ResourceQueryParserTrait;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Controller extends BaseController

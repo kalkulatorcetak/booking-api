@@ -2,10 +2,15 @@
 
 namespace App\Api\V1\Validators;
 
-class UserCreateValidator extends UserValidator
+class UserCreateValidator extends UserUpdateValidator
 {
     public function getRules(): array
     {
-        return array_merge(parent::getRules(), ['password' => 'required|string|min:8']);
+        return [
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users:email',
+            'password' => 'required|string|min:8',
+            'roles' => 'required|array',
+        ];
     }
 }
