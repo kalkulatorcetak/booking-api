@@ -16,6 +16,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@booking-api.dev',
             'password' => app('hash')->make('secret'),
+            'roles' => 'ADMIN',
         ]);
     }
 }

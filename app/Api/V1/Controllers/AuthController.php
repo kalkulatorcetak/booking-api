@@ -4,6 +4,8 @@ namespace App\Api\V1\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\JWTAuth;
@@ -38,5 +40,22 @@ class AuthController extends Controller
         }
 
         return response()->json(compact('token'));
+    }
+
+    public function refresh()
+    {
+        $token = $this->jwt->getToken();
+
+        if (!$token) {
+            throw new UnauthorizedHttpException('Token not provided');
+        }
+
+        try {
+            $token = $this->jwt->refresh($token);
+        } catch (TokenInvalidException $e) {
+            throw new AccessDeniedHttpException('The token is invalid');
+        }
+
+        return $this->response->withArray(['token' => $token]);
     }
 }
