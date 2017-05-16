@@ -7,10 +7,9 @@ use App\Api\V1\Transformers\UserTransformer;
 use App\Api\V1\Validators\UserCreateValidator;
 use App\Api\V1\Validators\UserUpdateValidator;
 use App\Http\Controllers\Controller;
+use Dingo\Api\Http\Request;
 use Dingo\Api\Http\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * User resource representation.
@@ -45,7 +44,7 @@ class UserController extends Controller
     public function show($id): Response
     {
         try {
-            $user = User::findOrFail($id);
+            $user = User::findById($id);
         } catch (ModelNotFoundException $ex) {
             $this->response->errorNotFound("User with id {$id} not found!");
         }
@@ -92,7 +91,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $userId): Response
     {
-        $user = User::findOrFail($userId);
+        $user = User::findById($userId, $request);
 
         $this->authorize('update', $user);
         $this->validateRequest($request, new UserUpdateValidator($user));

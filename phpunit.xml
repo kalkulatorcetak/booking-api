@@ -3,7 +3,7 @@
 <phpunit bootstrap="bootstrap.php">
     <testsuites>
         <testsuite name="Booking Api Test Suite">
-            <directory suffix="Test.php">./tests</directory>
+            <directory suffix="Test.php">./tests/</directory>
         </testsuite>
     </testsuites>
 </phpunit>

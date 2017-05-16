@@ -20,6 +20,7 @@ abstract class TestCase extends BaseTestCase implements Httpstatuscodes
         $this->jwtAuth = app('tymon.jwt.auth');
         $testUser = User::where('email', 'test@booking-api.dev')->first();
         $token = $this->jwtAuth->fromUser($testUser);
+        sleep(1);
 
         $this->client = new Client([
             'base_uri' => 'http://booking-api.dev',

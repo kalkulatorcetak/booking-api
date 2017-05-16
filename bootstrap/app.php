@@ -29,6 +29,7 @@ $app->withEloquent();
 
 $app->configure('roles');
 $app->configure('permissions');
+$app->configure('database');
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +91,7 @@ $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(LumenApiQueryParser\Provider\RequestQueryParserProvider::class);
 $app->register(App\Providers\PermissionServiceProvider::class);
 $app->register(App\Providers\RoleServiceProvider::class);
+$app->register(Illuminate\Redis\RedisServiceProvider::class);
 
 $app['Dingo\Api\Auth\Auth']->extend('jwt', function ($app) {
     return new Dingo\Api\Auth\Provider\JWT($app['Tymon\JWTAuth\JWTAuth']);
