@@ -1,7 +1,7 @@
 {
     "name": "ngabor84/booking-api",
-    "description": "Laravel Lumen based REST-API for booking",
-    "keywords": ["api", "booking", "laravel", "lumen"],
+    "description": "Laravel Lumen based REST-API for petty cash",
+    "keywords": ["api", "laravel", "lumen", "petty cash", "booking"],
     "license": "MIT",
     "type": "project",
     "authors": [
