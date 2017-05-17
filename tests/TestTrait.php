@@ -2,7 +2,7 @@
 
 namespace Test;
 
-use PHPUnit_Framework_Assert as Assertion;
+use PHPUnit\Framework\Assert as Assertion;
 
 trait TestTrait
 {
@@ -16,6 +16,8 @@ trait TestTrait
         if (count($this->errors) >= 1) {
             Assertion::fail(implode(PHP_EOL, $this->errors));
         }
+
+        Assertion::assertTrue(true);
     }
 
     protected function validateArray($rules, $resourceData)

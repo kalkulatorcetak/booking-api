@@ -11,5 +11,6 @@ $api->version(['version' => 'v1', 'namespace' => 'App\Api\V1\Controllers'], func
         $api->get('/users', 'App\Api\V1\Controllers\UserController@index');
         $api->post('/users', 'App\Api\V1\Controllers\UserController@store');
         $api->put('/users/{id}', 'App\Api\V1\Controllers\UserController@update');
+        $api->delete('/users/{id}', 'App\Api\V1\Controllers\UserController@delete');
     });
 });

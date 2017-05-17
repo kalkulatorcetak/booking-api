@@ -7,6 +7,8 @@ use Dingo\Api\Http\Request;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use Dingo\Api\Routing\Router;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AbstractModel extends Model
 {
@@ -26,7 +28,11 @@ class AbstractModel extends Model
         if (app('cache')->has($cacheKey)) {
             $model = unserialize(app('cache')->get($cacheKey), ['allowed_classes' => [static::class]]);
         } else {
-            $model = static::findOrFail($id);
+            try {
+                $model = static::findOrFail($id);
+            } catch (ModelNotFoundException $ex) {
+                throw new NotFoundHttpException($ex->getMessage(), null, $ex->getCode());
+            }
             app('cache')->put($cacheKey, serialize($model), 10);
         }
 

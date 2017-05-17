@@ -19,9 +19,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class UserController extends Controller
 {
     /**
-     * Show all users
-     *
-     * Get a JSON representation of all the registered users.
+     * List the users
      *
      * @Get("/")
      * @Versions({"v1"})
@@ -34,9 +32,7 @@ class UserController extends Controller
     }
 
     /**
-     * Get user
-     *
-     * Get a JSON representation of one user identified by id.
+     * Get an existing user
      *
      * @Get("/{id}")
      * @Versions({"v1"})
@@ -55,13 +51,11 @@ class UserController extends Controller
     }
 
     /**
-     * Create user
-     *
-     * Create a new user with a `username` and `password`.
+     * Create a new user
      *
      * @Post("/")
      * @Versions({"v1"})
-     * @Request({"name": "John Doe", "email": "john@doe.com", "password": "secret", "roles": ["ADMIN", "CASHIER"]})
+     * @Request({"name": "John Doe", "email": "john@doe.com", "password": "secret", "roles": {"ADMIN", "CASHIER"}})
      */
     public function store(Request $request): Response
     {
@@ -81,13 +75,11 @@ class UserController extends Controller
     }
 
     /**
-     * Update user
-     *
-     * Update the user datas
+     * Update an existing user
      *
      * @Put("/{id}")
      * @Versions({"v1"})
-     * @Request({"name": "John Doe", "email": "john@doe.com", "roles": ["ADMIN", "CASHIER"]})
+     * @Request({"name": "John Doe", "email": "john@doe.com", "roles": {"ADMIN", "CASHIER"}})
      */
     public function update(Request $request, $userId): Response
     {
@@ -105,5 +97,22 @@ class UserController extends Controller
         $user->save();
 
         return $this->item($user, new UserTransformer, ['key' => 'user']);
+    }
+
+    /**
+     * Delete an existing user
+     *
+     * @Delete("/{id}")
+     * @Version({"1"})
+     */
+    public function delete(Request $request, $userId): Response
+    {
+        $user = User::findById($userId, $request);
+
+        $this->authorize('delete', $user);
+
+        $user->delete();
+
+        return $this->response->noContent();
     }
 }

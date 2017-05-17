@@ -15,6 +15,17 @@ return [
             'collation' => 'utf8mb4_unicode_ci',
             'prefix'    => '',
         ],
+        'testing' => [
+            'host' => 'phpmyadmin.dev',
+            'port' => '3306',
+            'driver' => 'mysql',
+            'database'  => 'booking-api-test',
+            'username'  => 'homestead',
+            'password'  => 'secret',
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix'    => '',
+        ],
     ],
 
     'redis' => [

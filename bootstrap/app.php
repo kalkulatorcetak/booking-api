@@ -1,5 +1,10 @@
 <?php
 
+use Tymon\JWTAuth\JWTAuth;
+use Dingo\Api\Transformer\Factory;
+use Dingo\Api\Http\RateLimit\Handler;
+use Dingo\Api\Auth\Auth;
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 try {
@@ -20,7 +25,7 @@ try {
 */
 
 $app = new Laravel\Lumen\Application(
-    realpath(__DIR__.'/../')
+    dirname(__DIR__) . '/'
 );
 
 //$app->withFacades();
@@ -93,20 +98,20 @@ $app->register(App\Providers\PermissionServiceProvider::class);
 $app->register(App\Providers\RoleServiceProvider::class);
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
 
-$app['Dingo\Api\Auth\Auth']->extend('jwt', function ($app) {
-    return new Dingo\Api\Auth\Provider\JWT($app['Tymon\JWTAuth\JWTAuth']);
+$app[Auth::class]->extend('jwt', function ($app) {
+    return new Dingo\Api\Auth\Provider\JWT($app[JWTAuth::class]);
 });
-$app['Dingo\Api\Http\RateLimit\Handler']->extend(function ($app) {
+$app[Handler::class]->extend(function ($app) {
     return new Dingo\Api\Http\RateLimit\Throttle\Authenticated;
 });
-$app['Dingo\Api\Transformer\Factory']->setAdapter(function ($app) {
+$app[Factory::class]->setAdapter(function ($app) {
     $fractal = new League\Fractal\Manager;
 
     $fractal->setSerializer(new League\Fractal\Serializer\JsonApiSerializer);
 
     return new Dingo\Api\Transformer\Adapter\Fractal($fractal);
 });
-$app['Dingo\Api\Exception\Handler']->setErrorFormat([
+$app[\Dingo\Api\Exception\Handler::class]->setErrorFormat([
     'error' => [
         'message' => ':message',
         'errors' => ':errors',
