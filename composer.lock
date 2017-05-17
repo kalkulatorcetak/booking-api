@@ -2151,16 +2151,16 @@
         },
         {
             "name": "ngabor84/lumen-api-query-parser",
-            "version": "1.1.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ngabor84/lumen-api-query-parser.git",
-                "reference": "cb90aaa343de605d0f720f73847aa0f2b2e3d703"
+                "reference": "382706ccca8cdbc17a99399975c2d5e0e836404b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ngabor84/lumen-api-query-parser/zipball/cb90aaa343de605d0f720f73847aa0f2b2e3d703",
-                "reference": "cb90aaa343de605d0f720f73847aa0f2b2e3d703",
+                "url": "https://api.github.com/repos/ngabor84/lumen-api-query-parser/zipball/382706ccca8cdbc17a99399975c2d5e0e836404b",
+                "reference": "382706ccca8cdbc17a99399975c2d5e0e836404b",
                 "shasum": ""
             },
             "require": {
@@ -2197,7 +2197,7 @@
                 "lumen",
                 "query parser"
             ],
-            "time": "2017-05-09T05:34:22+00:00"
+            "time": "2017-05-17T06:13:39+00:00"
         },
         {
             "name": "nikic/fast-route",

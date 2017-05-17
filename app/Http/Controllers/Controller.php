@@ -7,6 +7,7 @@ use Dingo\Api\Exception\ValidationHttpException;
 use Dingo\Api\Http\Request;
 use Dingo\Api\Http\Response;
 use Dingo\Api\Routing\Helpers;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use League\Fractal\TransformerAbstract;
@@ -22,39 +23,40 @@ class Controller extends BaseController
 
     protected function responseByParams(string $class, Request $request, array $options): Response
     {
-        $cacheKey = static::getCacheKey($class, $request);
-        $cacheTag = static::getCacheTag($class, $request);
         $transformer = $this->getTransformerByClass($class);
         $query = $class::query();
         $params = $this->parseQueryParams($request);
 
-        if (app('cache')->tags($cacheTag)->has($cacheKey)) {
-            if ($params->hasPagination()) {
-                $paginator = unserialize(app('cache')->tags($cacheTag)->get($cacheKey));
-                $response = $this->response->paginator($paginator, $transformer, $options);
-            } else {
-                $collection = unserialize(app('cache')->tags($cacheTag)->get($cacheKey));
-                $response = $this->response->collection($collection, $transformer, $options);
-            }
+        if ($this->isCached($class, $request)) {
+            $paginator = $this->loadFromCache($class, $request);
         } else {
-            $collection = $this->applyParams($query, $params);
-
-            if ($params->hasPagination()) {
-                $paginator = $query->paginate($params->getPagination()->getLimit(), ['*'], 'page', $params->getPagination()->getPage());
-                app('cache')->tags($cacheTag)->put($cacheKey, serialize($paginator), 10);
-                $response = $this->response->paginator($paginator, $transformer, $options);
-            } else {
-                app('cache')->tags($cacheTag)->put($cacheKey, serialize($collection), 10);
-                $response = $this->response->collection($collection, $transformer, $options);
-            }
+            $paginator = $this->applyParams($query, $params);
+            $this->saveToCache($class, $request, $paginator);
         }
 
-        return $response;
+        return $this->response->paginator($paginator, $transformer, $options);;
+    }
+
+    protected function isCached(string $class, Request $request): bool
+    {
+        $cacheKey = static::getCacheKey($class, $request);
+        $cacheTag = static::getCacheTag($class, $request);
+
+        return app('cache')->tags($cacheTag)->has($cacheKey);
+    }
+
+    protected function loadFromCache(string $class, Request $request)
+    {
+        $cacheKey = static::getCacheKey($class, $request);
+        $cacheTag = static::getCacheTag($class, $request);
+
+        return unserialize(app('cache')->tags($cacheTag)->get($cacheKey));
     }
 
     protected function getTransformerByClass(string $class): TransformerAbstract
     {
         $transformerClass = sprintf("%sTransformer", str_replace('Models', 'Transformers', $class));
+
         if (!class_exists($transformerClass)) {
             throw new NotFoundHttpException("Transformer ({$transformerClass}) not found!");
         }
@@ -84,5 +86,13 @@ class Controller extends BaseController
         $version = $request->version();
 
         return [sprintf("%s.%sList", $version, class_basename($class))];
+    }
+
+    protected function saveToCache(string $class, Request $request, LengthAwarePaginator $paginator)
+    {
+        $cacheKey = static::getCacheKey($class, $request);
+        $cacheTag = static::getCacheTag($class, $request);
+
+        app('cache')->tags($cacheTag)->put($cacheKey, serialize($paginator), 10);
     }
 }
