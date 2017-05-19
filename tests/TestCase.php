@@ -3,15 +3,18 @@
 namespace Test;
 
 use GuzzleHttp\Client;
+use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\TestCase as BaseTestCase;
 use Lukasoppermann\Httpstatus\Httpstatuscodes;
 
 abstract class TestCase extends BaseTestCase implements Httpstatuscodes
 {
-    use TestTrait;
+    use DatabaseMigrations;
 
+    /**
+     * @var Client
+     */
     protected $client;
-    protected $jwtAuth;
 
     public function setUp()
     {
@@ -24,12 +27,19 @@ abstract class TestCase extends BaseTestCase implements Httpstatuscodes
             'headers' => [
                 'Accept' => 'application/vnd.booking.v1+json',
                 'Authorization' => 'Bearer ' . $token,
+                'Cookie' => 'XDEBUG_SESSION=XDEBUG_ECLIPSE',
             ]
         ]);
+
+        $this->artisan('db:seed');
     }
 
     public function createApplication()
     {
+        putenv('APP_ENV=testing');
+        putenv('DB_CONNECTION=testing');
+        putenv('API_DOMAIN=test.booking-api.dev');
+
         return require __DIR__.'/../bootstrap/app.php';
     }
 
