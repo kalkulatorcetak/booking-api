@@ -2,7 +2,6 @@
 
 namespace Test;
 
-use App\Api\V1\Models\User;
 use GuzzleHttp\Client;
 use Laravel\Lumen\Testing\TestCase as BaseTestCase;
 use Lukasoppermann\Httpstatus\Httpstatuscodes;
@@ -17,13 +16,10 @@ abstract class TestCase extends BaseTestCase implements Httpstatuscodes
     public function setUp()
     {
         parent::setUp();
-        $this->jwtAuth = app('tymon.jwt.auth');
-        $testUser = User::where('email', 'test@booking-api.dev')->first();
-        $token = $this->jwtAuth->fromUser($testUser);
-        sleep(1);
+        $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vOiIsImlhdCI6MTQ5NTA4ODg2OSwiZXhwIjoxNDk3NzE2ODY5LCJuYmYiOjE0OTUwODg4NjksImp0aSI6IjVteDJQOXRiMjFhdmFsS0wiLCJzdWIiOjF9.kutMfu0YrojY_JafRPVk1pVNVVddQgDaA1mp1N0GYG8';
 
         $this->client = new Client([
-            'base_uri' => 'http://booking-api.dev',
+            'base_uri' => 'http://test.booking-api.dev',
             'exceptions' => false,
             'headers' => [
                 'Accept' => 'application/vnd.booking.v1+json',

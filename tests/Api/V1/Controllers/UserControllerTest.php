@@ -2,16 +2,19 @@
 
 namespace Test\Api\V1;
 
+use Laravel\Lumen\Testing\DatabaseMigrations;
 use Test\TestCase;
 
 class UserControllerTest extends TestCase
 {
+    use DatabaseMigrations;
+
     /**
      * @test
      */
     public function listUsers()
     {
-        $response = $this->client->get('/users?filter[]=email:ct:test&order[]=name:asc&limit=5&page=1');
+        $response = $this->client->get('/users?filter[]=email:ct:test59&order[]=name:asc&limit=5&page=1');
 
         $this->assertEquals(
             self::HTTP_OK,

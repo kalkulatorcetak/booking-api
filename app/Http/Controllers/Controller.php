@@ -81,7 +81,7 @@ class Controller extends BaseController
         return sprintf("%s.%s.%s", $version, class_basename($class), md5($query));
     }
 
-    public static function getCacheTag($class, $request): array
+    public static function getCacheTag(string $class, Request $request): array
     {
         $version = $request->version();
 

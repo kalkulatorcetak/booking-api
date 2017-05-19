@@ -2,7 +2,9 @@
 
 namespace App\Console;
 
+use App\Console\Commands\TokenGenerateCommand;
 use Illuminate\Console\Scheduling\Schedule;
+use JK\Dingo\Api\Console\Commands\RouteListCommand;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
@@ -13,7 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \JK\Dingo\Api\Console\Commands\RouteListCommand::class
+        RouteListCommand::class,
+        TokenGenerateCommand::class,
     ];
 
     /**

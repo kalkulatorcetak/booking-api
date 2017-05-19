@@ -1,6 +1,8 @@
 <?php
 
-$api = app('Dingo\Api\Routing\Router');
+use Dingo\Api\Routing\Router;
+
+$api = app(Router::class);
 
 $api->version(['version' => 'v1', 'namespace' => 'App\Api\V1\Controllers'], function($api) {
     $api->post('/auth/login', 'App\Api\V1\Controllers\AuthController@login');
