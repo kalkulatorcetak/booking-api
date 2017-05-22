@@ -2,10 +2,13 @@
 
 namespace Test\EndToEnd\Api\V1;
 
+use Test\Helpers\UserTestHelper;
 use Test\TestCase;
 
 class UserControllerTest extends TestCase
 {
+    use UserTestHelper;
+
     /**
      * @test
      */
@@ -15,23 +18,7 @@ class UserControllerTest extends TestCase
 
         $this->assertEquals(self::HTTP_OK, $response->getStatusCode());
 
-        $expectedStructure = [
-            'data' => [
-                '*' => [
-                    'type',
-                    'id',
-                    'attributes' => [
-                        'name',
-                        'email',
-                        'roles',
-                        'added',
-                        'modified'
-                    ]
-                ]
-            ]
-        ];
-
-        $this->seeJsonStructure($expectedStructure, $this->getResponseArray($response));
+        $this->seeJsonStructure($this->userListStructure(), $this->getResponseArray($response));
     }
 
     /**
@@ -41,26 +28,9 @@ class UserControllerTest extends TestCase
     {
         $response = $this->client->get('/users/1');
 
-        $this->assertEquals(
-            self::HTTP_OK,
-            $response->getStatusCode()
-        );
+        $this->assertEquals(self::HTTP_OK, $response->getStatusCode());
 
-        $expectedStructure = [
-            'data' => [
-                'type',
-                'id',
-                'attributes' => [
-                    'name',
-                    'email',
-                    'roles',
-                    'added',
-                    'modified',
-                ]
-            ]
-        ];
-
-        $this->seeJsonStructure($expectedStructure, $this->getResponseArray($response));
+        $this->seeJsonStructure($this->userStructure(), $this->getResponseArray($response));
     }
 
     /**
@@ -70,9 +40,46 @@ class UserControllerTest extends TestCase
     {
         $response = $this->client->get('/users/99');
 
-        $this->assertEquals(
-            self::HTTP_NOT_FOUND,
-            $response->getStatusCode()
-        );
+        $this->assertEquals(self::HTTP_NOT_FOUND, $response->getStatusCode());
+    }
+
+    /**
+     * @test
+     */
+    public function createUserWithValidDatas()
+    {
+        $userData = [
+            'name' => 'Create Test',
+            'email' => 'test.create@booking-api.dev',
+            'password' => 'Secret123',
+            'roles' => [
+                'CASHIER'
+            ],
+        ];
+
+        $response = $this->client->post('/users', ['json' => $userData]);
+
+        $this->assertEquals(self::HTTP_OK, $response->getStatusCode());
+
+        $this->seeJsonStructure($this->userStructure(), $this->getResponseArray($response));
+    }
+
+    /**
+     * @test
+     */
+    public function createUserWithInvalidDatas()
+    {
+        $userData = [
+            'name' => 'Create Test',
+            'email' => 'test.create@booking-api.dev',
+            'password' => '1234',
+            'roles' => [
+                'CASHIER'
+            ],
+        ];
+
+        $response = $this->client->post('/users', ['json' => $userData]);
+
+        $this->assertEquals(self::HTTP_UNPROCESSABLE_ENTITY, $response->getStatusCode());
     }
 }

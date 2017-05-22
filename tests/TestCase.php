@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\TestCase as BaseTestCase;
 use Lukasoppermann\Httpstatus\Httpstatuscodes;
+use Psr\Http\Message\ResponseInterface;
 
 abstract class TestCase extends BaseTestCase implements Httpstatuscodes
 {
@@ -43,8 +44,13 @@ abstract class TestCase extends BaseTestCase implements Httpstatuscodes
         return require __DIR__.'/../bootstrap/app.php';
     }
 
-    public function getResponseArray($response)
+    public function getResponseArray(ResponseInterface $response): array
     {
-        return json_decode($response->getBody()->getContents(), true);
+        return json_decode($this->getResponseText($response), true);
+    }
+
+    public function getResponseText(ResponseInterface $response): string
+    {
+        return $response->getBody()->getContents();
     }
 }

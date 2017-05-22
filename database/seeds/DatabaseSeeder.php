@@ -13,7 +13,6 @@ class DatabaseSeeder extends Seeder
     {
         return [
             AdminUserSeeder::class,
-            UsersTableSeeder::class,
         ];
     }
 

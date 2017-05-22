@@ -13,6 +13,7 @@ class TestDatabaseSeeder extends Seeder
     {
         return [
             AdminUserSeeder::class,
+            UsersTableSeeder::class,
         ];
     }
 }
