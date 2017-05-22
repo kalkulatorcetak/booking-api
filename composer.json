@@ -23,7 +23,8 @@
         "jakubkratina/lumen-dingo-route-list": "^0.9.5",
         "ngabor84/lumen-api-query-parser": "~1.0",
         "predis/predis": "~1.0",
-        "illuminate/redis": "~5.4"
+        "illuminate/redis": "~5.4",
+        "doctrine/dbal": "^2.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -44,12 +45,20 @@
         ]
     },
     "scripts": {
-        "check": [
-            "@cs-check",
+        "checkntest": [
+            "@check",
             "@test"
         ],
-        "cs-check": "./vendor/bin/phpcs --colors",
-        "test": "./vendor/bin/phpunit --colors=always -c phpunit.xml"
+        "test": [
+            "@unit-test",
+            "@int-test",
+            "@e2e-test"
+        ],
+        "check": "./vendor/bin/phpcs --colors",
+        "fix": "./vendor/bin/phcbf",
+        "unit-test": "./vendor/bin/phpunit --colors=always --filter='UnitTest'",
+        "int-test": "./vendor/bin/phpunit --colors=always --filter='Integration'",
+        "e2e-test": "./vendor/bin/phpunit --colors=always --filter='EndToEnd'"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

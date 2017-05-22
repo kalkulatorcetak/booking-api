@@ -10,6 +10,8 @@ use App\Http\Controllers\Controller;
 use Dingo\Api\Http\Request;
 use Dingo\Api\Http\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Dingo\Api\Auth\Auth;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 /**
  * User resource representation.
@@ -66,7 +68,14 @@ class UserController extends Controller
         $user->fill($request->only(['name', 'email']));
         $user->setPassword($request->get('password'));
         if ($request->has('roles')) {
-            $user->setRoles($request->get('roles'));
+            $user = app(Auth::class)->user();
+            $roles = $request->get('roles');
+
+            if (in_array('ADMIN', $roles, true) && !$user->isAdmin()) {
+                throw new UnauthorizedHttpException(null, 'Only ADMIN user can add ADMIN role to a user');
+            }
+
+            $user->setRoles($roles);
         }
 
         $user->save();

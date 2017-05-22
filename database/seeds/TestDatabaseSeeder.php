@@ -1,11 +1,11 @@
 <?php
 
-class DatabaseSeeder extends Seeder
+class TestDatabaseSeeder extends Seeder
 {
     protected function tablesToTruncate(): array
     {
         return [
-            'users'
+            'users',
         ];
     }
 
@@ -13,8 +13,6 @@ class DatabaseSeeder extends Seeder
     {
         return [
             AdminUserSeeder::class,
-            UsersTableSeeder::class,
         ];
     }
-
 }

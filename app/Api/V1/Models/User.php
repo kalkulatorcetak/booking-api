@@ -7,7 +7,6 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Laravel\Lumen\Auth\Authorizable;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends AbstractModel implements JWTSubject, AuthenticatableContract, AuthorizableContract
@@ -41,12 +40,6 @@ class User extends AbstractModel implements JWTSubject, AuthenticatableContract,
 
     public function setRoles(array $roles): void
     {
-        $user = app('Dingo\Api\Auth\Auth')->user();
-
-        if (in_array('ADMIN', $roles) && !$user->isAdmin()) {
-            throw new UnauthorizedHttpException(null, 'Only ADMIN user can add ADMIN role to a user');
-        }
-
         $this->roles = implode(',', $roles);
     }
 

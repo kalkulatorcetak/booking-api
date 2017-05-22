@@ -31,7 +31,7 @@ abstract class TestCase extends BaseTestCase implements Httpstatuscodes
             ]
         ]);
 
-        $this->artisan('db:seed');
+        $this->artisan('db:seed', ['--class' => 'TestDatabaseSeeder']);
     }
 
     public function createApplication()

@@ -11,7 +11,7 @@ class UserControllerTest extends TestCase
      */
     public function listUsers()
     {
-        $response = $this->client->get('/users?filter[]=email:ct:test&order[]=name:asc&limit=5&page=1');
+        $response = $this->client->get('/users?filter[]=email:ct:Admin&order[]=name:asc&limit=5&page=1');
 
         $this->assertEquals(self::HTTP_OK, $response->getStatusCode());
 
