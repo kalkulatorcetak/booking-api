@@ -55,7 +55,7 @@
             "@e2e-test"
         ],
         "check": "./vendor/bin/phpcs --colors",
-        "fix": "./vendor/bin/phcbf",
+        "fix": "./vendor/bin/phpcbf",
         "unit-test": "./vendor/bin/phpunit --colors=always --filter='UnitTest'",
         "int-test": "./vendor/bin/phpunit --colors=always --filter='Integration'",
         "e2e-test": "./vendor/bin/phpunit --colors=always --filter='EndToEnd'"
