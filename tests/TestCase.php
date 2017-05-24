@@ -41,6 +41,7 @@ abstract class TestCase extends BaseTestCase implements Httpstatuscodes
     public function createApplication()
     {
         putenv('APP_ENV=testing');
+        putenv('CACHE_DRIVER=redis');
         putenv('DB_CONNECTION=testing');
         putenv('API_DOMAIN=test.booking-api.dev');
 
