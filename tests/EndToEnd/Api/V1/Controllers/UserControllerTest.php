@@ -14,11 +14,12 @@ class UserControllerTest extends TestCase
      */
     public function listUsersWithValidQueryParameters(): void
     {
-        $response = $this->client->get('/users?filter[]=email:ct:Admin&order[]=name:asc&limit=5&page=1');
+        $this->get('/users?filter[]=email:ct:Admin&order[]=name:asc&limit=5&page=1', $this->getHeaders())->seeStatusCode(self::HTTP_OK)->seeJsonStructure($this->userListStructure());
+        //$response = $this->client->get('/users?filter[]=email:ct:Admin&order[]=name:asc&limit=5&page=1');
 
-        $this->assertEquals(self::HTTP_OK, $response->getStatusCode());
+        //$this->assertEquals(self::HTTP_OK, $response->getStatusCode());
 
-        $this->seeJsonStructure($this->userListStructure(), $this->getResponseArray($response));
+        //$this->seeJsonStructure($this->userListStructure(), $this->getResponseArray($response));
     }
 
     /**

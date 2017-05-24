@@ -8,7 +8,6 @@ use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\TestCase as BaseTestCase;
 use Lukasoppermann\Httpstatus\Httpstatuscodes;
 use Psr\Http\Message\ResponseInterface;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 abstract class TestCase extends BaseTestCase implements Httpstatuscodes
 {
@@ -23,7 +22,8 @@ abstract class TestCase extends BaseTestCase implements Httpstatuscodes
     {
         parent::setUp();
         $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vOiIsImlhdCI6MTQ5NTA4ODg2OSwiZXhwIjoxNDk3NzE2ODY5LCJuYmYiOjE0OTUwODg4NjksImp0aSI6IjVteDJQOXRiMjFhdmFsS0wiLCJzdWIiOjF9.kutMfu0YrojY_JafRPVk1pVNVVddQgDaA1mp1N0GYG8';
-
+        $this->baseUrl = env('CI_BUILD_URL', 'http://test.booking-api.dev');
+        printf('Base URL: %s', $this->baseUrl);
         $this->client = new Client([
             'base_uri' => env('CI_BUILD_URL', 'http://test.booking-api.dev'),
             'exceptions' => false,
@@ -36,6 +36,17 @@ abstract class TestCase extends BaseTestCase implements Httpstatuscodes
 
         $this->artisan('db:seed', ['--class' => 'TestDatabaseSeeder']);
         $this->artisan('cache:clear');
+    }
+
+    protected function getHeaders()
+    {
+        $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vOiIsImlhdCI6MTQ5NTA4ODg2OSwiZXhwIjoxNDk3NzE2ODY5LCJuYmYiOjE0OTUwODg4NjksImp0aSI6IjVteDJQOXRiMjFhdmFsS0wiLCJzdWIiOjF9.kutMfu0YrojY_JafRPVk1pVNVVddQgDaA1mp1N0GYG8';
+
+        return [
+            'Accept' => 'application/vnd.booking.v1+json',
+            'Authorization' => 'Bearer ' . $token,
+            'Cookie' => 'XDEBUG_SESSION=XDEBUG_ECLIPSE',
+        ];
     }
 
     public function createApplication()
