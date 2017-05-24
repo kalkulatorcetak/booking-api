@@ -1,4 +1,4 @@
 /vendor
 /.idea
 .env
-.env.testing
+/database/test_database.sqlite
