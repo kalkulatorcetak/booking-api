@@ -6,7 +6,6 @@ use Illuminate\Database\Migrations\Migration as BaseMigration;
 
 abstract class Migration extends BaseMigration
 {
-
     protected $schema;
 
     public function __construct()
@@ -17,5 +16,4 @@ abstract class Migration extends BaseMigration
             return new Blueprint($table, $callback);
         });
     }
-
 }

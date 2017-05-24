@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="pcsg-generated-ruleset">
     <description>PHP Code Sniffer for Package</description>
-    <file>./app/Api</file>
+    <file>./app</file>
     <arg name="colors"/>
 
     <rule ref="PSR2">

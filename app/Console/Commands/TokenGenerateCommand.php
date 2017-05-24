@@ -13,12 +13,7 @@ class TokenGenerateCommand extends Command
 
     protected $jwtAuth;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    public function handle()
+    public function handle(): void
     {
         $this->jwtAuth = app('tymon.jwt.auth');
         $testUser = User::findOrFail($this->argument('userId'));

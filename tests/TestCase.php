@@ -2,11 +2,13 @@
 
 namespace Test;
 
+use Dingo\Api\Exception\InternalHttpException;
 use GuzzleHttp\Client;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\TestCase as BaseTestCase;
 use Lukasoppermann\Httpstatus\Httpstatuscodes;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 abstract class TestCase extends BaseTestCase implements Httpstatuscodes
 {
@@ -33,6 +35,7 @@ abstract class TestCase extends BaseTestCase implements Httpstatuscodes
         ]);
 
         $this->artisan('db:seed', ['--class' => 'TestDatabaseSeeder']);
+        $this->artisan('cache:clear');
     }
 
     public function createApplication()
@@ -52,5 +55,15 @@ abstract class TestCase extends BaseTestCase implements Httpstatuscodes
     public function getResponseText(ResponseInterface $response): string
     {
         return $response->getBody()->getContents();
+    }
+
+    public function getResponseErrors(ResponseInterface $response): array
+    {
+        $responseArray = $this->getResponseArray($response);
+        if (!isset($responseArray['error']['errors'])) {
+            throw new \InvalidArgumentException("Response doesn't contain errors' array!");
+        }
+
+        return $responseArray['error']['errors'];
     }
 }

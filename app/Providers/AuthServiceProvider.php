@@ -27,7 +27,7 @@ class AuthServiceProvider extends ServiceProvider
 
     protected function registerPolicies()
     {
-        foreach ($this->policies as $modelClass=>$policyClass) {
+        foreach ($this->policies as $modelClass => $policyClass) {
             app(Gate::class)->policy($modelClass, $policyClass);
         }
     }

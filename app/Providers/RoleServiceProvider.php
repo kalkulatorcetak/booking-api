@@ -9,7 +9,7 @@ class RoleServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton('roles', function ($app) {
+        $this->app->singleton('roles', function () {
             return new Roles();
         });
     }

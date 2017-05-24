@@ -34,7 +34,7 @@ class Controller extends BaseController
             $this->saveToCache($class, $request, $paginator);
         }
 
-        return $this->response->paginator($paginator, $transformer, $options);;
+        return $this->response->paginator($paginator, $transformer, $options);
     }
 
     protected function isCached(string $class, Request $request): bool
@@ -68,7 +68,7 @@ class Controller extends BaseController
     {
         try {
             $this->validate($request, $validator->getRules(), $validator->getMessages());
-        } catch(ValidationException $ex) {
+        } catch (ValidationException $ex) {
             throw new ValidationHttpException($ex->validator->errors());
         }
     }
