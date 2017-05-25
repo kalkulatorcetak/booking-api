@@ -14,12 +14,9 @@ class UserControllerTest extends TestCase
      */
     public function listUsersWithValidQueryParameters(): void
     {
-        $this->get('/users?filter[]=email:ct:Admin&order[]=name:asc&limit=5&page=1', $this->getHeaders())->seeStatusCode(self::HTTP_OK)->seeJsonStructure($this->userListStructure());
-        //$response = $this->client->get('/users?filter[]=email:ct:Admin&order[]=name:asc&limit=5&page=1');
-
-        //$this->assertEquals(self::HTTP_OK, $response->getStatusCode());
-
-        //$this->seeJsonStructure($this->userListStructure(), $this->getResponseArray($response));
+        $this->get('/users?filter[]=email:ct:Admin&order[]=name:asc&limit=5&page=1', $this->headers())
+            ->seeStatusCode(self::HTTP_OK)
+            ->seeJsonStructure($this->userListStructure());
     }
 
     /**
@@ -27,9 +24,8 @@ class UserControllerTest extends TestCase
      */
     public function listUsersWithInValidFilterOperator(): void
     {
-        $response = $this->client->get('/users?filter[]=email:like:Admin&order[]=name,asc&limit=5&page=1');
-
-        $this->assertEquals(self::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->get('/users?filter[]=email:like:Admin&order[]=name,asc&limit=5&page=1', $this->headers())
+            ->seeStatusCode(self::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -37,9 +33,8 @@ class UserControllerTest extends TestCase
      */
     public function listUsersWithInValidQueryParameters(): void
     {
-        $response = $this->client->get('/users?filter[]=email:Admin&order[]=name,asc&limit=5&page=1');
-
-        $this->assertEquals(self::HTTP_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+        $this->get('/users?filter[]=email:Admin&order[]=name,asc&limit=5&page=1', $this->headers())
+            ->seeStatusCode(self::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
@@ -47,11 +42,9 @@ class UserControllerTest extends TestCase
      */
     public function getExistingUserById(): void
     {
-        $response = $this->client->get('/users/1');
-
-        $this->assertEquals(self::HTTP_OK, $response->getStatusCode());
-
-        $this->seeJsonStructure($this->userStructure(), $this->getResponseArray($response));
+        $this->get('/users/1', $this->headers())
+            ->seeStatusCode(self::HTTP_OK)
+            ->seeJsonStructure($this->userStructure());
     }
 
     /**
@@ -59,9 +52,8 @@ class UserControllerTest extends TestCase
      */
     public function getNonExistingUserById(): void
     {
-        $response = $this->client->get('/users/99');
-
-        $this->assertEquals(self::HTTP_NOT_FOUND, $response->getStatusCode());
+        $this->get('/users/99', $this->headers())
+            ->seeStatusCode(self::HTTP_NOT_FOUND);
     }
 
     /**
@@ -78,11 +70,9 @@ class UserControllerTest extends TestCase
             ],
         ];
 
-        $response = $this->client->post('/users', ['json' => $userData]);
-
-        $this->assertEquals(self::HTTP_OK, $response->getStatusCode());
-
-        $this->seeJsonStructure($this->userStructure(), $this->getResponseArray($response));
+        $this->post('/users', $userData, $this->headers())
+            ->seeStatusCode(self::HTTP_OK)
+            ->seeJsonStructure($this->userStructure());
     }
 
     /**
@@ -99,12 +89,9 @@ class UserControllerTest extends TestCase
             ],
         ];
 
-        $response = $this->client->post('/users', ['json' => $userData]);
-
-        $this->assertEquals(self::HTTP_UNPROCESSABLE_ENTITY, $response->getStatusCode());
-
-        $expectedError = ['password' => ['The password must be at least 8 characters.']];
-        $this->assertArraySubset($expectedError, $this->getResponseErrors($response));
+        $this->post('/users', $userData, $this->headers())
+            ->seeStatusCode(self::HTTP_UNPROCESSABLE_ENTITY)
+            ->seeJsonContains(['password' => ['The password must be at least 8 characters.']]);
     }
 
     /**
@@ -112,9 +99,8 @@ class UserControllerTest extends TestCase
      */
     public function deleteExistingUser(): void
     {
-        $response = $this->client->delete('/users/51');
-
-        $this->assertEquals(self::HTTP_NO_CONTENT, $response->getStatusCode());
+        $this->delete('/users/51', [], $this->headers())
+            ->seeStatusCode(self::HTTP_NO_CONTENT);
     }
 
     /**
@@ -122,8 +108,7 @@ class UserControllerTest extends TestCase
      */
     public function deleteNonExistingUser(): void
     {
-        $response = $this->client->delete('/users/99');
-
-        $this->assertEquals(self::HTTP_NOT_FOUND, $response->getStatusCode());
+        $this->delete('/users/99', [], $this->headers())
+            ->seeStatusCode(self::HTTP_NOT_FOUND);
     }
 }

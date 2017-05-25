@@ -36,7 +36,8 @@
         "psr-4": {
             "App\\": "app/",
             "Test\\": "tests/"
-        }
+        },
+        "files": ["tests/Helpers/PHPUnit_Framework_Assert.php"]
     },
     "autoload-dev": {
         "classmap": [

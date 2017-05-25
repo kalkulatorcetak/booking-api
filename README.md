@@ -9,5 +9,6 @@ This application is still in development.
 ## Requirements
 - PHP >= 7.1
 - Redis
-- Mysql database
+- Mysql
+- Sqlite (for testing)
 
