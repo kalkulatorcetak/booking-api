@@ -88,7 +88,7 @@ class Controller extends BaseController
         return [sprintf("%s.%sList", $version, class_basename($class))];
     }
 
-    protected function saveToCache(string $class, Request $request, LengthAwarePaginator $paginator)
+    protected function saveToCache(string $class, Request $request, LengthAwarePaginator $paginator): void
     {
         $cacheKey = static::getCacheKey($class, $request);
         $cacheTag = static::getCacheTag($class, $request);

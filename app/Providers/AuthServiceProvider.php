@@ -13,7 +13,7 @@ class AuthServiceProvider extends ServiceProvider
         User::class => UserPolicy::class
     ];
 
-    public function boot()
+    public function boot(): void
     {
         $this->registerPolicies();
 
@@ -25,7 +25,7 @@ class AuthServiceProvider extends ServiceProvider
         );
     }
 
-    protected function registerPolicies()
+    protected function registerPolicies(): void
     {
         foreach ($this->policies as $modelClass => $policyClass) {
             app(Gate::class)->policy($modelClass, $policyClass);

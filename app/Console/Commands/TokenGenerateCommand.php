@@ -11,13 +11,10 @@ class TokenGenerateCommand extends Command
 
     protected $description = 'Generate an jwt auth access token';
 
-    protected $jwtAuth;
-
     public function handle(): void
     {
-        $this->jwtAuth = app('tymon.jwt.auth');
         $testUser = User::findOrFail($this->argument('userId'));
-        $token = $this->jwtAuth->fromUser($testUser);
+        $token = app('tymon.jwt.auth')->fromUser($testUser);
 
         echo sprintf('Generated token: %s', $token);
     }

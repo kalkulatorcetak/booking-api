@@ -15,5 +15,4 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
         ];
     }
-
 }

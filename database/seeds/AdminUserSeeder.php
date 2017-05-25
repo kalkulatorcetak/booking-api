@@ -5,7 +5,7 @@ use Illuminate\Database\Seeder;
 
 class AdminUserSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         User::flushEventListeners();
         $admin = new User;

@@ -3,29 +3,29 @@
 namespace App\Api\V1\Observers;
 
 use App\Http\Controllers\Controller;
-use App\Models\AbstractModel;
+use App\Models\Model;
 use Dingo\Api\Routing\Router;
 
 class ModelObserver
 {
-    public function created(AbstractModel $model): void
+    public function created(Model $model): void
     {
         $this->clearModelListCache($model);
     }
 
-    public function updated(AbstractModel $model): void
-    {
-        $this->clearModelCache($model);
-        $this->clearModelListCache($model);
-    }
-
-    public function deleted(AbstractModel $model): void
+    public function updated(Model $model): void
     {
         $this->clearModelCache($model);
         $this->clearModelListCache($model);
     }
 
-    protected function clearModelCache(AbstractModel $model): void
+    public function deleted(Model $model): void
+    {
+        $this->clearModelCache($model);
+        $this->clearModelListCache($model);
+    }
+
+    protected function clearModelCache(Model $model): void
     {
         $request = app(Router::class)->getCurrentRequest();
         $modelClass = get_class($model);
@@ -35,7 +35,7 @@ class ModelObserver
         app('cache')->tags($cacheTag)->forget($cacheKey);
     }
 
-    protected function clearModelListCache(AbstractModel $model): void
+    protected function clearModelListCache(Model $model): void
     {
         $request = app(Router::class)->getCurrentRequest();
         $modelClass = get_class($model);

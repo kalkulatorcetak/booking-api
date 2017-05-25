@@ -7,7 +7,7 @@ use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\TestCase as BaseTestCase;
 use Lukasoppermann\Httpstatus\Httpstatuscodes;
 
-abstract class TestCase extends BaseTestCase implements Httpstatuscodes
+abstract class EndToEndTestCase extends BaseTestCase implements Httpstatuscodes
 {
     use DatabaseMigrations;
 

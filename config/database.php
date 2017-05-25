@@ -21,7 +21,6 @@ return [
             'prefix'    => '',
         ],
     ],
-
     'redis' => [
         'client' => 'predis',
         'default' => [

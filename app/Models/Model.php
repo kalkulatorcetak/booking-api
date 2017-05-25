@@ -5,12 +5,12 @@ namespace App\Models;
 use App\Api\V1\Observers\ModelObserver;
 use Dingo\Api\Http\Request;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model as BaseModel;
 use Dingo\Api\Routing\Router;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class AbstractModel extends Model
+abstract class Model extends BaseModel
 {
     use HasTimestamps;
 
@@ -21,7 +21,7 @@ class AbstractModel extends Model
         parent::boot();
     }
 
-    public static function findById(int $id): AbstractModel
+    public static function findById(int $id): Model
     {
         $request = app(Router::class)->getCurrentRequest();
         $cacheKey = static::getCacheKey($id, $request);

@@ -9,7 +9,7 @@ abstract class Seeder extends BaseSeeder
 
     abstract protected function seeders(): array;
 
-    public function run()
+    public function run(): void
     {
         Model::unguard();
 
@@ -26,7 +26,7 @@ abstract class Seeder extends BaseSeeder
         }
     }
 
-    protected function seeding()
+    protected function seeding(): void
     {
         foreach ($this->seeders() as $seeder) {
             $this->call($seeder);

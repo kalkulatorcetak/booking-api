@@ -2,18 +2,18 @@
 
 namespace App\Api\V1\Models;
 
-use App\Models\AbstractModel;
+use App\Models\Model;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Laravel\Lumen\Auth\Authorizable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends AbstractModel implements JWTSubject, AuthenticatableContract, AuthorizableContract
+class User extends Model implements JWTSubject, AuthenticatableContract, AuthorizableContract
 {
     use Authenticatable, Authorizable;
 
-    protected $permissions;
+    protected $permissions = [];
 
     protected $fillable = [
         'name', 'email',
@@ -23,12 +23,12 @@ class User extends AbstractModel implements JWTSubject, AuthenticatableContract,
         'password',
     ];
 
-    public function getJWTIdentifier()
+    public function getJWTIdentifier(): int
     {
-        return $this->getKey();
+        return (int) $this->getKey();
     }
 
-    public function getJWTCustomClaims()
+    public function getJWTCustomClaims(): array
     {
         return [];
     }
@@ -45,7 +45,7 @@ class User extends AbstractModel implements JWTSubject, AuthenticatableContract,
 
     public function hasRole(string $role): bool
     {
-        return in_array($role, $this->getRoles());
+        return in_array($role, $this->getRoles(), true);
     }
 
     public function getRoles(): array
@@ -55,16 +55,16 @@ class User extends AbstractModel implements JWTSubject, AuthenticatableContract,
 
     public function hasPermission(string $permission): bool
     {
-        return in_array($permission, $this->getPermissions());
+        return in_array($permission, $this->getPermissions(), true);
     }
 
     public function getPermissions(): array
     {
-        if (!isset($this->permissions)) {
+        if (empty($this->permissions)) {
             $this->permissions = [];
             foreach ($this->getRoles() as $role) {
                 foreach (app('roles')->getRolePermissions($role) as $permission) {
-                    if (!in_array($permission, $this->permissions)) {
+                    if (!in_array($permission, $this->permissions, true)) {
                         $this->permissions[] = $permission;
                     }
                 }

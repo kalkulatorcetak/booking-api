@@ -13,3 +13,15 @@ This application is still in development!
 - Mysql
 - Sqlite (for testing)
 
+## Main features
+- Auto generated documentation (php artisan api:docs)
+- Authentication with JWT
+- Authorization with roles and permissions
+- Caching
+- Data transformation
+- Formatted exceptions with http status codes
+- Request validation
+- Request query parsing (filtering, sorting, pagination, eager loading)
+- Structured JSON format response
+- Unit, integration, and e2e tests
+- Versioning (via Accept header)

@@ -19,7 +19,7 @@ class UserPolicy
     public function load(User $actualUser, User $editedUser): bool
     {
         return ($actualUser->hasPermission('USER_LOAD')
-            || $actualUser->id == $editedUser->id
+            || $actualUser->id === $editedUser->id
         );
     }
 
@@ -31,14 +31,14 @@ class UserPolicy
     public function update(User $actualUser, User $editedUser): bool
     {
         return ($actualUser->hasPermission('USER_UPDATE')
-            || $actualUser->id == $editedUser->id
+            || $actualUser->id === $editedUser->id
         );
     }
 
     public function delete(User $actualUser, User $editedUser)
     {
         return ($actualUser->hasPermission('USER_DELETE')
-            || $actualUser->id == $editedUser->id
+            || $actualUser->id === $editedUser->id
         );
     }
 }

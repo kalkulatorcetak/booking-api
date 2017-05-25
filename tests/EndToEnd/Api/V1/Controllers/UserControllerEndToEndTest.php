@@ -3,9 +3,9 @@
 namespace Test\EndToEnd\Api\V1;
 
 use Test\Helpers\UserTestHelper;
-use Test\TestCase;
+use Test\EndToEndTestCase;
 
-class UserControllerTest extends TestCase
+class UserControllerEndToEndTest extends EndToEndTestCase
 {
     use UserTestHelper;
 

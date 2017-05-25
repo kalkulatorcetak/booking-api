@@ -3,6 +3,7 @@
 namespace App\Api\V1\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -20,7 +21,7 @@ class AuthController extends Controller
         $this->jwt = $jwt;
     }
 
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         $this->validate($request, [
             'email'    => 'required|email|max:255',
@@ -42,7 +43,7 @@ class AuthController extends Controller
         return response()->json(compact('token'));
     }
 
-    public function refresh()
+    public function refresh(): JsonResponse
     {
         $token = $this->jwt->getToken();
 
@@ -56,6 +57,6 @@ class AuthController extends Controller
             throw new AccessDeniedHttpException('The token is invalid');
         }
 
-        return $this->response->withArray(['token' => $token]);
+        return response()->json(compact('token'));
     }
 }

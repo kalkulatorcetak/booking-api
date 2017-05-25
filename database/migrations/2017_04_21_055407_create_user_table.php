@@ -1,11 +1,11 @@
 <?php
 
-use app\Database\Blueprint;
+use App\Database\Blueprint;
 use App\Database\Migration;
 
 class CreateUserTable extends Migration
 {
-    public function up()
+    public function up(): void
     {
         $this->schema->create('users', function (Blueprint $table) {
             $table->increments('id');
@@ -17,7 +17,7 @@ class CreateUserTable extends Migration
         });
     }
 
-    public function down()
+    public function down(): void
     {
         $this->schema->drop('users');
     }

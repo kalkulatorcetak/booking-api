@@ -5,7 +5,7 @@ use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         User::flushEventListeners();
         factory(User::class, 50)->create();

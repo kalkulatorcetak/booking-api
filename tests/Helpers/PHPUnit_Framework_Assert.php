@@ -1,6 +1,8 @@
 <?php
 
-class PHPUnit_Framework_Assert extends \PHPUnit\Framework\Assert
+use PHPUnit\Framework\Assert;
+
+class PHPUnit_Framework_Assert extends Assert
 {
 
 }
