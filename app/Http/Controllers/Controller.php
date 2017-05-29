@@ -7,6 +7,8 @@ use Dingo\Api\Exception\ValidationHttpException;
 use Dingo\Api\Http\Request;
 use Dingo\Api\Http\Response;
 use Dingo\Api\Routing\Helpers;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\Access\Response as IlluminateResponse;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -14,6 +16,7 @@ use League\Fractal\TransformerAbstract;
 use LumenApiQueryParser\BuilderParamsApplierTrait;
 use LumenApiQueryParser\ResourceQueryParserTrait;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class Controller extends BaseController
 {
@@ -94,5 +97,14 @@ class Controller extends BaseController
         $cacheTag = static::getCacheTag($class, $request);
 
         app('cache')->tags($cacheTag)->put($cacheKey, serialize($paginator), 10);
+    }
+
+    public function authorize($ability, $arguments = []): IlluminateResponse
+    {
+        try {
+            return parent::authorize($ability, $arguments);
+        } catch (AuthorizationException $ex) {
+            throw new UnauthorizedHttpException('', $ex->getMessage(), null, $ex->getCode());
+        }
     }
 }

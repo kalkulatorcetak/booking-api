@@ -50,7 +50,7 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
 
     public function getRoles(): array
     {
-        return explode(',', $this->roles);
+        return $this->roles === null ? [] : explode(',', $this->roles);
     }
 
     public function hasPermission(string $permission): bool
