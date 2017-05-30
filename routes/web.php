@@ -14,5 +14,11 @@ $api->version(['version' => 'v1', 'namespace' => 'App\Api\V1\Controllers'], func
         $api->post('/users', 'App\Api\V1\Controllers\UserController@store');
         $api->put('/users/{id}', 'App\Api\V1\Controllers\UserController@update');
         $api->delete('/users/{id}', 'App\Api\V1\Controllers\UserController@delete');
+
+        $api->get('/cassas/{id}', 'App\Api\V1\Controllers\CassaController@show');
+        $api->get('/cassas', 'App\Api\V1\Controllers\CassaController@index');
+        $api->post('/cassas', 'App\Api\V1\Controllers\CassaController@store');
+        $api->put('/cassas/{id}', 'App\Api\V1\Controllers\CassaController@update');
+        $api->delete('/cassas/{id}', 'App\Api\V1\Controllers\CassaController@delete');
     });
 });

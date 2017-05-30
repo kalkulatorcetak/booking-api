@@ -2,6 +2,7 @@
 
 namespace App\Api\V1\Observers;
 
+use App\Contracts\Cacheable;
 use App\Http\Controllers\Controller;
 use App\Models\Model;
 use Dingo\Api\Routing\Router;
@@ -10,19 +11,25 @@ class ModelObserver
 {
     public function created(Model $model): void
     {
-        $this->clearModelListCache($model);
+        if ($this->isCacheable($model)) {
+            $this->clearModelListCache($model);
+        }
     }
 
     public function updated(Model $model): void
     {
-        $this->clearModelCache($model);
-        $this->clearModelListCache($model);
+        if ($this->isCacheable($model)) {
+            $this->clearModelCache($model);
+            $this->clearModelListCache($model);
+        }
     }
 
     public function deleted(Model $model): void
     {
-        $this->clearModelCache($model);
-        $this->clearModelListCache($model);
+        if ($this->isCacheable($model)) {
+            $this->clearModelCache($model);
+            $this->clearModelListCache($model);
+        }
     }
 
     protected function clearModelCache(Model $model): void
@@ -42,5 +49,10 @@ class ModelObserver
         $cacheTag = Controller::getCacheTag($modelClass, $request);
 
         app('cache')->tags($cacheTag)->flush();
+    }
+
+    protected function isCacheable(Model $model): bool
+    {
+        return $model instanceof Cacheable;
     }
 }

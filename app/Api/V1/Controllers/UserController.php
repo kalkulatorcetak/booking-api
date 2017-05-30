@@ -92,7 +92,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $userId): Response
     {
-        $user = User::findById($userId, $request);
+        $user = User::findById($userId);
 
         $this->authorize('update', $user);
         $this->validateRequest($request, new UserUpdateValidator($user));
@@ -114,9 +114,9 @@ class UserController extends Controller
      * @Delete("/{id}")
      * @Version({"1"})
      */
-    public function delete(Request $request, $userId): Response
+    public function delete($userId): Response
     {
-        $user = User::findById($userId, $request);
+        $user = User::findById($userId);
 
         $this->authorize('delete', $user);
 

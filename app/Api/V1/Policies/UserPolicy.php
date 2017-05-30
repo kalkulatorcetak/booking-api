@@ -35,7 +35,7 @@ class UserPolicy
         );
     }
 
-    public function delete(User $actualUser, User $editedUser)
+    public function delete(User $actualUser, User $editedUser): bool
     {
         return ($actualUser->hasPermission('USER_DELETE')
             || $actualUser->id === $editedUser->id

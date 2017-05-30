@@ -22,6 +22,7 @@
         "lukasoppermann/http-status": "^2.0",
         "jakubkratina/lumen-dingo-route-list": "^0.9.5",
         "ngabor84/lumen-api-query-parser": "~1.0",
+        "ngabor84/enum": "~v0.3",
         "predis/predis": "~1.0",
         "illuminate/redis": "~5.4",
         "doctrine/dbal": "^2.5"
