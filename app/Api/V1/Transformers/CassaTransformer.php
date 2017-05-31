@@ -3,6 +3,7 @@
 namespace App\Api\V1\Transformers;
 
 use App\Api\V1\Models\Cassa;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use League\Fractal\TransformerAbstract;
 
@@ -15,6 +16,8 @@ class CassaTransformer extends TransformerAbstract
             'name' => $cassa->name,
             'currency' => $cassa->currency,
             'users' => $this->transformUsers($cassa->getCassaUsers()),
+            'added' => (new Carbon($cassa->created_at))->toDateTimeString(),
+            'modified' => (new Carbon($cassa->updated_at))->toDateTimeString(),
         ];
     }
 

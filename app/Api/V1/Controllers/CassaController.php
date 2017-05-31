@@ -67,7 +67,7 @@ class CassaController extends Controller
         $cassa = new Cassa;
         $cassa->fill($request->only(['name', 'currency']));
 
-        app('db')->transaction(function() use ($cassa, $request) {
+        app('db')->transaction(function () use ($cassa, $request) {
             $cassa->save();
 
             if ($request->has('users')) {
