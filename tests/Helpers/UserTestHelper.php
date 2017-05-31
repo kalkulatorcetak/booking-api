@@ -2,9 +2,11 @@
 
 namespace Test\Helpers;
 
+use App\Api\V1\Models\User;
+
 trait UserTestHelper
 {
-    public function userStructure(): array
+    protected function userStructure(): array
     {
         return [
             'data' => [
@@ -21,7 +23,7 @@ trait UserTestHelper
         ];
     }
 
-    public function userListStructure(): array
+    protected function userListStructure(): array
     {
         return [
             'data' => [
@@ -38,5 +40,10 @@ trait UserTestHelper
                 ]
             ]
         ];
+    }
+
+    protected function getAdminUser(): User
+    {
+        return User::findOrFail(1);
     }
 }

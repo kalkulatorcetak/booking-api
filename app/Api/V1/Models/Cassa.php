@@ -3,10 +3,11 @@
 namespace App\Api\V1\Models;
 
 use App\Api\V1\Enums\CassaAccessType;
+use App\Contracts\Cacheable;
 use App\Models\Model;
 use Illuminate\Database\Eloquent\Collection;
 
-class Cassa extends Model
+class Cassa extends Model implements Cacheable
 {
     protected $fillable = [
         'name', 'currency'
@@ -42,7 +43,7 @@ class Cassa extends Model
 
     public function removeCassaUser(User $user): void
     {
-        CassaUser::where('cassa_id', $this->id)->where('user', $user->id)->delete();
+        CassaUser::where('cassa_id', $this->id)->where('user_id', $user->id)->delete();
     }
 
     public function removeAllCassaUsers(): void

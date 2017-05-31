@@ -4,7 +4,7 @@ namespace Test\Helpers;
 
 trait CassaTestHelper
 {
-    public function cassaStructure(): array
+    protected function cassaStructure(): array
     {
         return [
             'data' => [
@@ -21,7 +21,7 @@ trait CassaTestHelper
         ];
     }
 
-    public function cassaListStructure(): array
+    protected function cassaListStructure(): array
     {
         return [
             'data' => [

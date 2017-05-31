@@ -2,24 +2,11 @@
 
 namespace Test;
 
-use Laravel\Lumen\Application;
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\TestCase as BaseTestCase;
 use Lukasoppermann\Httpstatus\Httpstatuscodes;
 
-abstract class EndToEndTestCase extends BaseTestCase implements Httpstatuscodes
+abstract class EndToEndTestCase extends TestCase implements Httpstatuscodes
 {
-    use DatabaseMigrations;
-
     protected $baseUrl = 'http://test.booking-api.dev';
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->artisan('db:seed', ['--class' => 'TestDatabaseSeeder']);
-        $this->artisan('cache:clear');
-    }
 
     protected function headers(): array
     {
@@ -30,15 +17,5 @@ abstract class EndToEndTestCase extends BaseTestCase implements Httpstatuscodes
             'Authorization' => 'Bearer ' . $token,
             'Cookie' => 'XDEBUG_SESSION=XDEBUG_ECLIPSE',
         ];
-    }
-
-    public function createApplication(): Application
-    {
-        putenv('APP_ENV=testing');
-        putenv('CACHE_DRIVER=redis');
-        putenv('DB_CONNECTION=testing');
-        putenv('API_DOMAIN=test.booking-api.dev');
-
-        return require __DIR__.'/../bootstrap/app.php';
     }
 }
