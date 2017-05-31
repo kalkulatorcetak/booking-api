@@ -6,13 +6,10 @@ use App\Api\V1\Enums\CassaAccessType;
 use App\Api\V1\Enums\Currency;
 use App\Api\V1\Models\Cassa;
 use App\Api\V1\Models\User;
-use Test\Helpers\UserTestHelper;
 use Test\UnitTestCase;
 
 class CassaUnitTest extends UnitTestCase
 {
-    use UserTestHelper;
-
     /**
      * @test
      */
@@ -86,6 +83,11 @@ class CassaUnitTest extends UnitTestCase
         $accessType = $cassa->getCassaUserAccessType($user);
 
         $this->assertEquals(CassaAccessType::EDIT, $accessType);
+    }
+
+    protected function getAdminUser(): User
+    {
+        return User::findOrFail(1);
     }
 
     protected function createCassa($cassaName, $currency): Cassa

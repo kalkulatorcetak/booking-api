@@ -41,9 +41,4 @@ trait UserTestHelper
             ]
         ];
     }
-
-    protected function getAdminUser(): User
-    {
-        return User::findOrFail(1);
-    }
 }

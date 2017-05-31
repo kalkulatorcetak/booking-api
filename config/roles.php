@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'ADMIM' => [
+    'ADMIN' => [
         'USER_LOAD',
         'USER_CREATE',
         'USER_UPDATE',
