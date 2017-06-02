@@ -1,15 +1,17 @@
 <?php
 
-namespace Test\Unit\Api\V1\Models;
+namespace Test\Integration\Api\V1\Models;
 
 use App\Api\V1\Enums\CassaAccessType;
 use App\Api\V1\Enums\Currency;
-use App\Api\V1\Models\Cassa;
 use App\Api\V1\Models\User;
-use Test\UnitTestCase;
+use Test\Helpers\V1\CassaTestHelper;
+use Test\IntegrationTestCase;
 
-class CassaUnitTest extends UnitTestCase
+class CassaIntegrationTest extends IntegrationTestCase
 {
+    use CassaTestHelper;
+
     /**
      * @test
      */
@@ -88,15 +90,5 @@ class CassaUnitTest extends UnitTestCase
     protected function getAdminUser(): User
     {
         return User::findOrFail(1);
-    }
-
-    protected function createCassa($cassaName, $currency): Cassa
-    {
-        $cassa = new Cassa();
-        $cassa->name = $cassaName;
-        $cassa->currency = $currency;
-        $cassa->save();
-
-        return $cassa;
     }
 }

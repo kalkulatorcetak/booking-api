@@ -5,7 +5,7 @@ namespace App\Api\V1\Models;
 use App\Api\V1\Enums\CassaAccessType;
 use App\Contracts\Cacheable;
 use App\Models\Model;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 class Cassa extends Model implements Cacheable
 {

@@ -4,96 +4,68 @@ namespace Test\Unit\Api\V1\Transformers;
 
 use App\Api\V1\Enums\CassaAccessType;
 use App\Api\V1\Enums\Currency;
-use App\Api\V1\Models\Cassa;
-use App\Api\V1\Models\User;
 use App\Api\V1\Transformers\CassaTransformer;
 use Carbon\Carbon;
+use Test\Helpers\V1\CassaTestHelper;
 use Test\UnitTestCase;
 
 class CassaTransformerUnitTest extends UnitTestCase
 {
+    use CassaTestHelper;
+
     /**
      * @test
+     * @dataProvider cassaDataProvider
      */
-    public function cassaTransform(): void
+    public function cassaTransform($cassaData): void
     {
-        foreach ($this->cassaDataProvider() as [$cassa, $expected]) {
-            $this->assertEquals($expected, (new CassaTransformer())->transform($cassa));
-        }
+        $cassa = $this->createCassaStub($cassaData);
+        $this->assertEquals($cassaData, (new CassaTransformer())->transform($cassa));
     }
 
     public function cassaDataProvider(): array
     {
         return [
             [
-                $cassa = $this->createCassa('Test HUF Cassa', Currency::HUF, $this->getUsersByIds([1])),
                 [
-                    'id' => $cassa->id,
-                    'name' => $cassa->name,
-                    'currency' => $cassa->currency,
-                    'users' => [['id' => 1, 'name' => 'Administrator', 'access_type'=> CassaAccessType::EDIT]],
-                    'added' => (new Carbon($cassa->created_at))->toDateTimeString(),
-                    'modified' => (new Carbon($cassa->updated_at))->toDateTimeString(),
+                    'id' => 1,
+                    'name' => 'Test HUF cassa',
+                    'currency' => Currency::HUF,
+                    'users' => [['id' => 1, 'name' => 'Administrator', 'access_type'=> CassaAccessType::READ]],
+                    'added' => (new Carbon())->toDateTimeString(),
+                    'modified' => (new Carbon())->toDateTimeString(),
                 ]
             ],
             [
-                $cassa = $this->createCassa('Test EUR Cassa', Currency::EUR, $this->getUsersByIds([1])),
                 [
-                    'id' => $cassa->id,
-                    'name' => $cassa->name,
-                    'currency' => $cassa->currency,
+                    'id' => 2,
+                    'name' => 'Test EUR cassa',
+                    'currency' => Currency::EUR,
                     'users' => [['id' => 1, 'name' => 'Administrator', 'access_type'=> CassaAccessType::EDIT]],
-                    'added' => (new Carbon($cassa->created_at))->toDateTimeString(),
-                    'modified' => (new Carbon($cassa->updated_at))->toDateTimeString(),
+                    'added' => (new Carbon())->toDateTimeString(),
+                    'modified' => (new Carbon())->toDateTimeString(),
                 ]
             ],
             [
-                $cassa = $this->createCassa('Test GBP Cassa', Currency::GBP, $this->getUsersByIds([1])),
                 [
-                    'id' => $cassa->id,
-                    'name' => $cassa->name,
-                    'currency' => $cassa->currency,
-                    'users' => [['id' => 1, 'name' => 'Administrator', 'access_type'=> CassaAccessType::EDIT]],
-                    'added' => (new Carbon($cassa->created_at))->toDateTimeString(),
-                    'modified' => (new Carbon($cassa->updated_at))->toDateTimeString(),
+                    'id' => 3,
+                    'name' => 'Test GBP cassa',
+                    'currency' => Currency::GBP,
+                    'users' => [['id' => 1, 'name' => 'Administrator', 'access_type'=> CassaAccessType::READ]],
+                    'added' => (new Carbon())->toDateTimeString(),
+                    'modified' => (new Carbon())->toDateTimeString(),
                 ]
             ],
             [
-                $cassa = $this->createCassa('Test USD Cassa', Currency::USD, $this->getUsersByIds([1])),
                 [
-                    'id' => $cassa->id,
-                    'name' => $cassa->name,
-                    'currency' => $cassa->currency,
+                    'id' => 4,
+                    'name' => 'Test USD cassa',
+                    'currency' => Currency::USD,
                     'users' => [['id' => 1, 'name' => 'Administrator', 'access_type'=> CassaAccessType::EDIT]],
-                    'added' => (new Carbon($cassa->created_at))->toDateTimeString(),
-                    'modified' => (new Carbon($cassa->updated_at))->toDateTimeString(),
+                    'added' => (new Carbon())->toDateTimeString(),
+                    'modified' => (new Carbon())->toDateTimeString(),
                 ]
             ],
         ];
-    }
-
-    protected function createCassa(string $name, string $currency, array $users): Cassa
-    {
-        $cassa = new Cassa();
-        $cassa->name = $name;
-        $cassa->currency = $currency;
-        $cassa->save();
-
-        foreach ($users as $user) {
-            $cassa->addCassaUser($user, new CassaAccessType(CassaAccessType::EDIT));
-        }
-
-        return $cassa;
-    }
-
-    protected function getUsersByIds(array $userIds): array
-    {
-        $users = [];
-
-        foreach ($userIds as $userId) {
-            $users[] = User::findOrFail($userId);
-        }
-
-        return $users;
     }
 }

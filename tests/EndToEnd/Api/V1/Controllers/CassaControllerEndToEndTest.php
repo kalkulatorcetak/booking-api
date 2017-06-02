@@ -5,7 +5,7 @@ namespace Test\EndToEnd\Api\V1\Controllers;
 use App\Api\V1\Enums\CassaAccessType;
 use App\Api\V1\Enums\Currency;
 use Test\EndToEndTestCase;
-use Test\Helpers\CassaTestHelper;
+use Test\Helpers\V1\CassaTestHelper;
 
 class CassaControllerEndToEndTest extends EndToEndTestCase
 {

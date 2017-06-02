@@ -1,12 +1,13 @@
 <?php
 
-namespace Test\Unit\Api\V1\Models;
+namespace Test\Integration\Api\V1\Models;
 
 use App\Api\V1\Models\User;
-use Test\UnitTestCase;
+use Test\IntegrationTestCase;
 
-class UserUnitTest extends UnitTestCase
+class UserIntegrationTest extends IntegrationTestCase
 {
+
     /**
      * @test
      */

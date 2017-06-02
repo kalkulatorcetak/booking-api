@@ -2,7 +2,7 @@
 
 namespace Test\EndToEnd\Api\V1;
 
-use Test\Helpers\UserTestHelper;
+use Test\Helpers\V1\UserTestHelper;
 use Test\EndToEndTestCase;
 
 class UserControllerEndToEndTest extends EndToEndTestCase
