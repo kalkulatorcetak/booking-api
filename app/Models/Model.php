@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Api\V1\Observers\ModelObserver;
+use App\Contracts\Cacheable;
 use Dingo\Api\Http\Request;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model as BaseModel;
@@ -24,16 +25,34 @@ abstract class Model extends BaseModel
     public static function findById(int $id): Model
     {
         $request = app(Router::class)->getCurrentRequest();
-        $cacheKey = static::getCacheKey($id, $request);
-        if (app('cache')->has($cacheKey)) {
-            $model = unserialize(app('cache')->get($cacheKey), ['allowed_classes' => [static::class]]);
-        } else {
+        $model = null;
+
+        if (static::class instanceof Cacheable) {
+            $model = static::loadFromCacheById($id, $request);
+        }
+
+        if ($model === null) {
             try {
                 $model = static::findOrFail($id);
             } catch (ModelNotFoundException $ex) {
                 throw new NotFoundHttpException($ex->getMessage(), null, $ex->getCode());
             }
-            app('cache')->put($cacheKey, serialize($model), 10);
+
+            if (static::class instanceof Cacheable) {
+                static::saveToCache($id, $request, $model);
+            }
+        }
+
+        return $model;
+    }
+
+    protected static function loadFromCacheById(int $id, Request $request): ?Model
+    {
+        $model = null;
+        $cacheKey = static::getCacheKey($id, $request);
+
+        if (app('cache')->has($cacheKey)) {
+            $model = unserialize(app('cache')->get($cacheKey), ['allowed_classes' => [static::class]]);
         }
 
         return $model;
@@ -44,5 +63,12 @@ abstract class Model extends BaseModel
         $version = $request->version();
 
         return sprintf('%s.%s.%d', $version, class_basename(static::class), $id);
+    }
+
+    protected static function saveToCache($id, $request, $model): void
+    {
+        $cacheKey = static::getCacheKey($id, $request);
+
+        app('cache')->put($cacheKey, serialize($model), 10);
     }
 }

@@ -10,7 +10,7 @@ abstract class EndToEndTestCase extends TestCase implements Httpstatuscodes
 
     protected function headers(): array
     {
-        $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vOiIsImlhdCI6MTQ5NTA4ODg2OSwiZXhwIjoxNDk3NzE2ODY5LCJuYmYiOjE0OTUwODg4NjksImp0aSI6IjVteDJQOXRiMjFhdmFsS0wiLCJzdWIiOjF9.kutMfu0YrojY_JafRPVk1pVNVVddQgDaA1mp1N0GYG8';
+        $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vOiIsImlhdCI6MTQ5NzI4MjM0MSwiZXhwIjoxNDk5OTEwMzQxLCJuYmYiOjE0OTcyODIzNDEsImp0aSI6IllKZjlPZ3N0NmRwT3B0OVUiLCJzdWIiOjF9.XeNVK08G-yHGrE0a04uf1pVY8_-q6HMHoVLuE3byOP8';
 
         return [
             'Accept' => 'application/vnd.booking.v1+json',
