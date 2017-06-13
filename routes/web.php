@@ -20,5 +20,11 @@ $api->version(['version' => 'v1', 'namespace' => 'App\Api\V1\Controllers'], func
         $api->post('/cassas', 'App\Api\V1\Controllers\CassaController@store');
         $api->put('/cassas/{id}', 'App\Api\V1\Controllers\CassaController@update');
         $api->delete('/cassas/{id}', 'App\Api\V1\Controllers\CassaController@delete');
+
+        $api->get('/vouchers/{id}', 'App\Api\V1\Controllers\VoucherController@show');
+        $api->get('/vouchers', 'App\Api\V1\Controllers\VoucherController@index');
+        $api->post('/vouchers', 'App\Api\V1\Controllers\VoucherController@store');
+        $api->put('/vouchers/{id}', 'App\Api\V1\Controllers\VoucherController@update');
+        $api->delete('/vouchers/{id}', 'App\Api\V1\Controllers\VoucherController@delete');
     });
 });

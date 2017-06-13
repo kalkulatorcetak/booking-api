@@ -4,10 +4,8 @@ namespace App\Models;
 
 use App\Api\V1\Observers\ModelObserver;
 use App\Contracts\Cacheable;
-use Dingo\Api\Http\Request;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model as BaseModel;
-use Dingo\Api\Routing\Router;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -24,32 +22,26 @@ abstract class Model extends BaseModel
 
     public static function findById(int $id): Model
     {
-        $request = app(Router::class)->getCurrentRequest();
         $model = null;
 
         if (static::class instanceof Cacheable) {
-            $model = static::loadFromCacheById($id, $request);
+            $model = static::loadFromCacheById($id);
         }
 
         if ($model === null) {
-            try {
-                $model = static::findOrFail($id);
-            } catch (ModelNotFoundException $ex) {
-                throw new NotFoundHttpException($ex->getMessage(), null, $ex->getCode());
-            }
-
+            $model = self::loadFromDatabaseById($id);
             if (static::class instanceof Cacheable) {
-                static::saveToCache($id, $request, $model);
+                static::saveToCache($id, $model);
             }
         }
 
         return $model;
     }
 
-    protected static function loadFromCacheById(int $id, Request $request): ?Model
+    protected static function loadFromCacheById(int $id): ?Model
     {
         $model = null;
-        $cacheKey = static::getCacheKey($id, $request);
+        $cacheKey = static::getCacheKey($id);
 
         if (app('cache')->has($cacheKey)) {
             $model = unserialize(app('cache')->get($cacheKey), ['allowed_classes' => [static::class]]);
@@ -58,16 +50,25 @@ abstract class Model extends BaseModel
         return $model;
     }
 
-    protected static function getCacheKey(int $id, Request $request): string
+    public static function getCacheKey(int $id): string
     {
-        $version = $request->version();
-
-        return sprintf('%s.%s.%d', $version, class_basename(static::class), $id);
+        return sprintf('%s.%d', static::class, $id);
     }
 
-    protected static function saveToCache($id, $request, $model): void
+    protected static function loadFromDatabaseById(int $id): Model
     {
-        $cacheKey = static::getCacheKey($id, $request);
+        try {
+            $model = static::findOrFail($id);
+        } catch (ModelNotFoundException $ex) {
+            throw new NotFoundHttpException($ex->getMessage(), null, $ex->getCode());
+        }
+
+        return $model;
+    }
+
+    protected static function saveToCache($id, $model): void
+    {
+        $cacheKey = static::getCacheKey($id);
 
         app('cache')->put($cacheKey, serialize($model), 10);
     }

@@ -47,7 +47,7 @@ class CassaPolicy
     protected function hasCassaAccess(User $user, Cassa $cassa, array $accesTypes = []): bool
     {
         if (empty($accesTypes)) {
-            $accesTypes = [CassaAccessType::READ, CassaAccessType::EDIT];
+            $accesTypes = CassaAccessType::listValues();
         }
 
         $access = $cassa->getCassaUserAccessType($user)->getValue();

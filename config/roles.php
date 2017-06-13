@@ -10,6 +10,10 @@ return [
         'CASSA_CREATE',
         'CASSA_UPDATE',
         'CASSA_DELETE',
+        'VOUCHER_LOAD',
+        'VOUCHER_CREATE',
+        'VOUCHER_UPDATE',
+        'VOUCHER_DELETE',
     ],
     'CASHIER' => [
         'USER_LOAD',
@@ -20,5 +24,9 @@ return [
         'CASSA_CREATE',
         'CASSA_UPDATE',
         'CASSA_DELETE',
+        'VOUCHER_LOAD',
+        'VOUCHER_CREATE',
+        'VOUCHER_UPDATE',
+        'VOUCHER_DELETE',
     ],
 ];
